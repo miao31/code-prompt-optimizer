@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>code-prompt-optimizer · 效果示例</title>
+<style>
+  :root{
+    --bg:#f5f7fa; --card:#ffffff; --ink:#1f2933; --muted:#69707d;
+    --line:#e4e7eb; --accent:#0b7285; --accent-soft:#e6f3f5;
+    --warn:#b54708; --warn-soft:#fff4e6; --ok:#2b6a3f;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    line-height:1.6;padding:32px 16px}
+  .wrap{max-width:920px;margin:0 auto}
+  header.card{padding:24px 28px;margin-bottom:20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:20px 24px;margin-bottom:18px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+  h1{margin:0 0 4px;font-size:22px}
+  .sub{color:var(--muted);font-size:14px;margin:0}
+  h2{font-size:17px;margin:0 0 12px;display:flex;align-items:center;gap:8px}
+  .tag{font-size:12px;font-weight:600;color:var(--accent);background:var(--accent-soft);
+    border-radius:999px;padding:2px 10px}
+  .raw{background:var(--warn-soft);border:1px solid #ffd8a8;border-left:4px solid var(--warn);
+    border-radius:8px;padding:12px 16px;font-style:italic;color:#7a3a05}
+  .assume{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+  .chip{font-size:12.5px;background:#eef2f5;border:1px solid var(--line);border-radius:6px;
+    padding:4px 10px;color:var(--muted)}
+  .chip b{color:var(--ink)}
+  .tabs{display:flex;gap:6px;margin:14px 0 0}
+  .tab{font-size:13px;font-weight:600;padding:7px 16px;border:1px solid var(--line);
+    background:#fff;color:var(--muted);border-radius:8px 8px 0 0;cursor:pointer}
+  .tab.active{color:var(--accent);background:var(--accent-soft);border-color:var(--accent);
+    border-bottom-color:transparent}
+  .pane{border:1px solid var(--line);border-top:none;border-radius:0 0 8px 8px;
+    padding:14px 16px;background:#fcfdfe}
+  .pane pre{margin:0;white-space:pre-wrap;word-break:break-word;font-family:var(--mono);
+    font-size:13px;line-height:1.65}
+  .hidden{display:none}
+  .legend{font-size:12.5px;color:var(--muted);margin-top:8px}
+  .ok{color:var(--ok);font-weight:600}
+  footer{font-size:12.5px;color:var(--muted);text-align:center;margin-top:6px}
+  code.k{background:#eef2f5;padding:1px 6px;border-radius:4px;font-family:var(--mono);font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="card">
+    <h1>code-prompt-optimizer · 效果示例</h1>
+    <p class="sub">优化给 AI 代码助手的用户提示词：自动补全隐藏需求，输出简洁版 + 进阶版双提示词。<br>
+    Optimize user prompts for AI coding assistants — auto-fill hidden requirements, output concise + advanced versions.</p>
+  </header>
+
+  <!-- 示例一 -->
+  <section class="card">
+    <h2><span class="tag">示例 1</span> 排序函数（生成类）</h2>
+    <div class="raw">「帮我写一个函数，把数组排序」</div>
+    <p class="legend">原始请求过于模糊，skill 先补全以下隐藏假设，再生成双版本提示词：</p>
+    <div class="assume">
+      <span class="chip"><b>语言</b> 未指定</span>
+      <span class="chip"><b>顺序</b> 升/降未定</span>
+      <span class="chip"><b>稳定性</b> 是否稳定</span>
+      <span class="chip"><b>原地</b> 改原数组 or 新数组</span>
+      <span class="chip"><b>边界</b> 空值/重复</span>
+      <span class="chip"><b>性能</b> 有无要求</span>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-ex="1" data-v="c">简洁版</button>
+      <button class="tab" data-ex="1" data-v="a">进阶版</button>
+    </div>
+    <div class="pane" data-pane="1-c">
+<pre>你是一名资深 JavaScript 工程师。请用 JavaScript 实现稳定升序排序函数 sortStable(arr)：不修改原数组、返回新数组；空数组返回 []；元素为同类型数字或字符串；时间复杂度 O(n log n)；附 2 个使用示例与边界测试。</pre>
+    </div>
+    <div class="pane hidden" data-pane="1-a">
+<pre># 角色
+资深 JavaScript 工程师，熟悉稳定排序与不变性（immutability）。
+
+# 任务
+实现 sortStable(arr)，对输入数组做稳定升序排序。
+
+# 约束
+- 不修改原数组，返回新数组（纯函数）
+- 仅处理同类型元素：数字或字符串
+- 时间复杂度 O(n log n)，空间合理
+- 空数组返回 []，重复元素保持原有相对顺序
+
+# 输入 / 输出
+输入：arr: (number|string)[]   输出：排序后的新数组
+
+# 交付
+1) 函数实现  2) 2 个使用示例  3) 边界测试用例（空数组、全等重复、混合类型报错）
+
+# 验收
+运行示例与测试无报错；原数组未被改动。</pre>
+    </div>
+  </section>
+
+  <!-- 示例二 -->
+  <section class="card">
+    <h2><span class="tag">示例 2</span> 报错排查（调试类）</h2>
+    <div class="raw">「我的代码报错，帮我看看」</div>
+    <p class="legend">调试类请求最缺上下文，skill 强制补全 5 项关键信息后再输出：</p>
+    <div class="assume">
+      <span class="chip"><b>栈信息</b> 报错原文</span>
+      <span class="chip"><b>复现代码</b> 最小片段</span>
+      <span class="chip"><b>期望</b> 应得结果</span>
+      <span class="chip"><b>环境</b> 语言/版本</span>
+      <span class="chip"><b>已试</b> 排查动作</span>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-ex="2" data-v="c">简洁版</button>
+      <button class="tab" data-ex="2" data-v="a">进阶版</button>
+    </div>
+    <div class="pane" data-pane="2-c">
+<pre>下面是 Python 3.11 报错（附完整 traceback）。请先给出最可能的根因（1 句），再给最小修改补丁，最后说明为什么这样改。不要重写整个文件。我已试过重启和 pip install -U，无效。期望：函数返回去重后的列表。</pre>
+    </div>
+    <div class="pane hidden" data-pane="2-a">
+<pre># 背景
+Python 3.11 脚本，运行时抛异常（traceback 见下）。
+
+# 提供的信息
+- 完整报错 traceback（粘贴）
+- 能复现的最小代码片段（粘贴）
+- 期望行为：函数返回去重后的列表
+- 已尝试：重启解释器、pip install -U，均无效
+
+# 你的任务
+1) 用 1 句话指出最可能的根因
+2) 给出最小修改补丁（diff 形式）
+3) 解释为什么这样改、是否引入副作用
+
+# 约束
+- 不要重写整个文件
+- 不引入新依赖
+- 保持原接口签名不变
+
+# 验收
+补丁应用后脚本不再报错，且输出为去重列表。</pre>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><span class="ok">✓</span> 这个示例说明了什么</h2>
+    <p class="legend">
+      模糊请求 → 补全隐藏假设 → <code class="k">简洁版</code>（即贴即用，短平快）+
+      <code class="k">进阶版</code>（结构化，含角色/约束/输入输出/验收，适合复杂任务）。
+      同一套工作流覆盖「生成 / 重构 / 测试 / 调试 / 审查」全部代码场景。
+    </p>
+  </section>
+
+  <footer>code-prompt-optimizer v1.0.0 · MIT · 由 WorkBuddy Skill 生成</footer>
+</div>
+
+<script>
+  document.querySelectorAll('.tab').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var ex = btn.dataset.ex, v = btn.dataset.v;
+      // 同组 tab 高亮切换
+      document.querySelectorAll('.tab[data-ex="'+ex+'"]').forEach(function(t){
+        t.classList.toggle('active', t===btn);
+      });
+      // pane 切换
+      document.querySelectorAll('.pane[data-pane^="'+ex+'-"]').forEach(function(p){
+        p.classList.toggle('hidden', p.dataset.pane !== ex+'-'+v);
+      });
+    });
+  });
+</script>
+</body>
+</html>

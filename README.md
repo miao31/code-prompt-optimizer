@@ -2,11 +2,17 @@
 
 一个 WorkBuddy Skill：把「我要让代码助手做 X」这类需求，自动转化为高质量、可直接粘贴给 AI 代码助手（Copilot / CodeBuddy / Claude / Cursor / Gemini…）的提示词。
 
+![code-prompt-optimizer 效果示意](preview.png)
+
 ## 它能做什么
 
 - 自动补全代码场景的隐藏需求：语言/框架、编码规范、约束、上下文范围、安全边界、输出形态、示例。
 - 同时输出 **简洁版**（日常快用）与 **进阶版**（角色 + 思维链 + 少样本 + 约束强化）。
 - 去噪消歧：删除无效指令、化解矛盾，保证目标助手稳定执行。
+
+## 效果示例 / Demo
+
+想直接看效果？打开 [example.html](example.html)（纯前端、零依赖，浏览器直接打开）查看交互式演示：输入一段模糊请求，skill 先补全隐藏需求，再给出「简洁版」与「进阶版」双提示词。内置「生成类（排序函数）」与「调试类（报错排查）」两个场景，可点击切换。
 
 ## 安装
 
@@ -34,6 +40,8 @@ code-prompt-optimizer/
 ├── SKILL.md                       # 入口：元数据 + 核心流程
 ├── references/
 │   └── code-prompt-cookbook.md    # 代码域补全要素与少样本模板
+├── example.html                   # 交互式效果示例（浏览器打开）
+├── preview.png                    # README 配图（效果示意）
 ├── README.md
 └── LICENSE
 ```
