@@ -1,40 +1,110 @@
 # code-prompt-optimizer
 
-一个 WorkBuddy Skill：把「我要让代码助手做 X」这类需求，自动转化为高质量、可直接粘贴给 AI 代码助手（Copilot / CodeBuddy / Claude / Cursor / Gemini…）的提示词。
+> 把「我要让代码助手做 X」这类模糊需求，自动转化为高质量、可直接粘贴给 AI 代码助手的提示词。自动补全隐藏需求，并同时输出「简洁版」与「进阶版」双提示词。
+>
+> Turn vague "make the coding assistant do X" requests into high-quality, copy-paste-ready prompts for AI coding assistants — with hidden requirements auto-filled and both concise & advanced versions.
+
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#贡献指南)
+[![Platform: WorkBuddy](https://img.shields.io/badge/platform-WorkBuddy-0b7285.svg)](https://www.workbuddy.cn)
+[![Type: Skill](https://img.shields.io/badge/type-Skill-9b59b6.svg)](SKILL.md)
+![Updated](https://img.shields.io/badge/updated-2026--09--22-orange.svg)
 
 ![code-prompt-optimizer 效果示意](preview.png)
 
-## 它能做什么
+## 目录
 
-- 自动补全代码场景的隐藏需求：语言/框架、编码规范、约束、上下文范围、安全边界、输出形态、示例。
-- 同时输出 **简洁版**（日常快用）与 **进阶版**（角色 + 思维链 + 少样本 + 约束强化）。
-- 去噪消歧：删除无效指令、化解矛盾，保证目标助手稳定执行。
+- [项目简介](#项目简介)
+- [功能特性](#功能特性)
+- [安装](#安装)
+- [快速开始](#快速开始)
+- [使用示例](#使用示例)
+- [工作流程](#工作流程)
+- [目录结构](#目录结构)
+- [贡献指南](#贡献指南)
+- [许可证](#许可证)
 
-## 效果示例 / Demo
+## 项目简介
 
-想直接看效果？打开 [example.html](example.html)（纯前端、零依赖，浏览器直接打开）查看交互式演示：输入一段模糊请求，skill 先补全隐藏需求，再给出「简洁版」与「进阶版」双提示词。内置「生成类（排序函数）」与「调试类（报错排查）」两个场景，可点击切换。
+写代码时，我们常对 AI 代码助手（Copilot / CodeBuddy / Claude / Cursor / Gemini…）丢一句模糊需求，例如「帮我写一个函数，把数组排序」。这类请求缺省了大量隐藏信息——语言、框架、规范、约束、边界、输出形态——导致输出质量不稳、需要反复返工。
+
+**code-prompt-optimizer** 是一个 WorkBuddy Skill，专门补上这些缺口：它先把你没说清的隐藏需求推断出来，再产出一份**即贴即用**的提示词，并同时给出「简洁版」（日常快用）与「进阶版」（结构化、含角色/约束/输入输出/验收，适合复杂任务），让你对 AI 代码助手的每一次提问都更精准、更高效。
+
+## 功能特性
+
+- **隐藏需求自动补全**：语言/框架、编码规范、约束、上下文范围、安全边界、输出形态、示例，一次性补齐。
+- **双版本输出**：简洁版（短平快）+ 进阶版（角色 + 思维链 + 少样本 + 约束强化），按场景取用。
+- **去噪消歧**：删除无效指令、化解前后矛盾，保证目标助手稳定执行。
+- **全场景覆盖**：生成 / 重构 / 测试 / 调试 / 审查，同一套工作流通吃。
+- **零配置、跨平台**：纯指令型 Skill，无脚本、无第三方依赖、无密钥，Windows / macOS / Linux 通用。
 
 ## 安装
 
-### 方式一：WorkBuddy 开放平台（推荐，全平台可搜）
-1. 访问 [open.workbuddy.cn](https://open.workbuddy.cn)，完成开发者认证。
-2. 发布管理 → 技能 → 上传本仓库打包好的 `code-prompt-optimizer.zip`。
-3. 审核通过后即在技能市场可见，用户一键安装、开箱即用。
+### 方式一：GitHub / 本地
 
-### 方式二：GitHub / 本地
+> 前置条件：已安装 [WorkBuddy](https://www.workbuddy.cn) 并登录。
+
 ```bash
 git clone <repo-url> code-prompt-optimizer
-# 复制到用户技能目录（跨平台路径）
-# macOS / Linux: ~/.workbuddy/skills/code-prompt-optimizer
-# Windows:        %USERPROFILE%\.workbuddy\skills\code-prompt-optimizer
+# 将整个目录复制到用户技能目录（跨平台路径）
+# macOS / Linux:
+cp -r code-prompt-optimizer ~/.workbuddy/skills/
+# Windows (PowerShell):
+Copy-Item -Recurse code-prompt-optimizer "$env:USERPROFILE\.workbuddy\skills\"
 ```
-重启 WorkBuddy 即可在对话中通过 `/code-prompt-optimizer` 或自然语言触发。
 
-## 跨平台与零配置
-- 纯指令型 Skill，无脚本、无第三方依赖、无密钥，天然跨平台（Windows / macOS / Linux）。
-- 安装后无需任何额外配置，直接调用。
+重启 WorkBuddy 后，即可在对话中通过 `/code-prompt-optimizer` 或自然语言（如「帮我优化这段给代码助手的提示」）触发。
+
+## 快速开始
+
+把你的模糊需求丢给本 Skill，它会自动补全并返回双版本提示词。例如：
+
+**输入（你的原始需求）**
+
+```
+帮我写一个函数，把数组排序
+```
+
+**输出（Skill 生成）**
+
+- **简洁版**：`你是一名资深 JavaScript 工程师。请用 JavaScript 实现稳定升序排序函数 sortStable(arr)：不修改原数组、返回新数组；空数组返回 []；元素为同类型数字或字符串；时间复杂度 O(n log n)；附 2 个使用示例与边界测试。`
+- **进阶版**（节选）：`# 角色 / # 任务 / # 约束 / # 输入·输出 / # 交付 / # 验收` 六段式结构化提示词。
+
+> 更完整的两个交互示例（生成类 / 调试类）见下方[使用示例](#使用示例)。
+
+## 使用示例
+
+想直接看效果，打开仓库内的交互式演示 **[example.html](example.html)**（纯前端、零依赖，浏览器直接打开）：输入一段模糊请求，Skill 先补全隐藏需求，再给出「简洁版」与「进阶版」双提示词，可点击切换。
+
+**示例一 · 生成类（排序函数）**
+
+```text
+原始请求：帮我写一个函数，把数组排序
+补全假设：语言未指定 / 顺序升降未定 / 是否稳定 / 原地还是新数组 / 空值与重复 / 性能要求
+→ 简洁版 + 进阶版（见 example.html「示例 1」）
+```
+
+**示例二 · 调试类（报错排查）**
+
+```text
+原始请求：我的代码报错，帮我看看
+补全假设：报错栈信息 / 最小复现代码 / 期望结果 / 语言版本 / 已尝试动作
+→ 简洁版 + 进阶版（见 example.html「示例 2」）
+```
+
+## 工作流程
+
+本 Skill 的内部处理遵循四步法，确保产出严谨、可用：
+
+1. **拆解** —— 解析你的目标与已给信息，识别缺失维度。
+2. **补全** —— 基于代码场景补全隐藏假设（语言/框架/规范/约束/边界/输出形态/示例）。
+3. **双版本** —— 生成简洁版（快用）与进阶版（结构化强约束）。
+4. **自检** —— 去噪、消歧、校验矛盾，保证目标助手可稳定执行。
+
+> 补全要素清单与少样本模板见 [`references/code-prompt-cookbook.md`](references/code-prompt-cookbook.md)。
 
 ## 目录结构
+
 ```
 code-prompt-optimizer/
 ├── SKILL.md                       # 入口：元数据 + 核心流程
@@ -46,5 +116,17 @@ code-prompt-optimizer/
 └── LICENSE
 ```
 
+## 贡献指南
+
+欢迎 Issue 与 Pull Request！
+
+1. Fork 本仓库并创建特性分支：`git checkout -b feature/your-idea`
+2. 提交改动：`git commit -m "feat: 你的改动说明"`
+3. 推送到分支：`git push origin feature/your-idea`
+4. 发起 Pull Request，并简述改动动机。
+
+提交前请确保：`SKILL.md` 与 `references/` 的改动保持纯指令、无硬编码密钥、跨平台可用。本仓库遵循 [Contributor Covenant](https://www.contributor-covenant.org/) 行为准则。
+
 ## 许可证
-MIT
+
+[MIT](LICENSE) © 苗子圳
