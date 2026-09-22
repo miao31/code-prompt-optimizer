@@ -40,8 +40,6 @@
 
 ## 安装
 
-### 方式一：GitHub / 本地
-
 > 前置条件：已安装 [WorkBuddy](https://www.workbuddy.cn) 并登录。
 
 ```bash
