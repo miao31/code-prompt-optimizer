@@ -6,7 +6,7 @@
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#贡献指南)
-[![Platform: WorkBuddy](https://img.shields.io/badge/platform-WorkBuddy-0b7285.svg)](https://www.workbuddy.cn)
+[![Compatible: Any Agent](https://img.shields.io/badge/compatible-any%20agent-0b7285.svg)]()
 [![Type: Skill](https://img.shields.io/badge/type-Skill-9b59b6.svg)](SKILL.md)
 ![Updated](https://img.shields.io/badge/updated-2026--09--22-orange.svg)
 
@@ -28,7 +28,7 @@
 
 写代码时，我们常对 AI 代码助手（Copilot / CodeBuddy / Claude / Cursor / Gemini…）丢一句模糊需求，例如「帮我写一个函数，把数组排序」。这类请求缺省了大量隐藏信息——语言、框架、规范、约束、边界、输出形态——导致输出质量不稳、需要反复返工。
 
-**code-prompt-optimizer** 是一个 WorkBuddy Skill，专门补上这些缺口：它先把你没说清的隐藏需求推断出来，再产出一份**即贴即用**的提示词，并同时给出「简洁版」（日常快用）与「进阶版」（结构化、含角色/约束/输入输出/验收，适合复杂任务），让你对 AI 代码助手的每一次提问都更精准、更高效。
+**code-prompt-optimizer** 是一个与厂商无关的提示词优化 Skill，遵循通用的 Skill 调用规范，可被任何兼容该规范的智能体加载使用。它专门补上这些缺口：它先把你没说清的隐藏需求推断出来，再产出一份**即贴即用**的提示词，并同时给出「简洁版」（日常快用）与「进阶版」（结构化、含角色/约束/输入输出/验收，适合复杂任务），让你对 AI 代码助手的每一次提问都更精准、更高效。
 
 ## 功能特性
 
@@ -40,18 +40,16 @@
 
 ## 安装
 
-> 前置条件：已安装 [WorkBuddy](https://www.workbuddy.cn) 并登录。
+> 前置条件：你使用的智能体支持加载本地 Skill（遵循其约定的技能目录与 Skill 调用规范）。
 
 ```bash
 git clone <repo-url> code-prompt-optimizer
-# 将整个目录复制到用户技能目录（跨平台路径）
-# macOS / Linux:
-cp -r code-prompt-optimizer ~/.workbuddy/skills/
-# Windows (PowerShell):
-Copy-Item -Recurse code-prompt-optimizer "$env:USERPROFILE\.workbuddy\skills\"
+# 将 code-prompt-optimizer/ 整个目录放入你的智能体所约定的「技能目录」
+# 目录名需符合该智能体的 Skill 调用规范（通常即为 code-prompt-optimizer）
+# 不同智能体的技能目录路径不同，请以其官方文档为准
 ```
 
-重启 WorkBuddy 后，即可在对话中通过 `/code-prompt-optimizer` 或自然语言（如「帮我优化这段给代码助手的提示」）触发。
+重启你的智能体客户端（或刷新技能列表）后，即可在对话中通过 `/code-prompt-optimizer` 或自然语言（如「帮我优化这段给代码助手的提示」）触发。
 
 ## 快速开始
 

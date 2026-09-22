@@ -7,7 +7,6 @@ description_zh: 当用户需要为 AI 代码助手（如 GitHub Copilot、CodeBu
 description_en: This skill should be used when the user wants to write, refine, or optimize prompts for AI code assistants (e.g., GitHub Copilot, CodeBuddy, Claude, Cursor, Gemini). It turns a one-line task description into a production-ready code-assistant prompt, auto-completing language, framework, constraints, and output format, and emits both a concise version and an advanced version.
 version: 1.0.0
 author: 苗子圳
-agent_created: true
 ---
 
 # Code Prompt Optimizer
